@@ -4,39 +4,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+   >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome to the Dashboard"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp" />
 
     <Button
         android:id="@+id/btn_appinbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Custom INBOX" />
+        android:text="TEST"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@color/dashboardbutton_color"
+        android:padding="12dp"
+        android:elevation="8dp"
+        android:layout_marginBottom="16dp" />
 
     <Button
         android:id="@+id/btn_appinbox2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Default UI"
-        android:layout_marginTop="16dp" />
-
-    <Button
-        android:id="@+id/btn_logout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Logout"
-        android:layout_marginTop="16dp" />
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_gravity="center" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:text="DashBoard Screen"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@color/button_color_secondary"
+        android:padding="12dp"
+        android:elevation="8dp"
         android:layout_marginTop="16dp" />
 </LinearLayout>
 
@@ -47,56 +47,3 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-    <!--
-    <?xml version="1.0" encoding="utf-8"?>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="16dp">
-
-        &lt;!&ndash; TextView for Logout &ndash;&gt;
-        <TextView
-            android:id="@+id/tv_logout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/logout"
-            android:textSize="18sp"
-            android:textColor="@color/blue"
-            android:padding="16dp"
-            android:layout_gravity="end"
-            android:background="?android:attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true" />
-
-        &lt;!&ndash; Centered ProgressBar &ndash;&gt;
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:gravity="center"
-            android:layout_gravity="center"/>
-
-        &lt;!&ndash; RecyclerView for displaying Inbox messages &ndash;&gt;
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:padding="8dp"
-            android:clipToPadding="false" />
-
-    </LinearLayout>
-    -->

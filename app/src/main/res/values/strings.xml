@@ -36,7 +36,7 @@
     <string name="guest_login">Guest Login</string>
     <string name="last_name">Last Name</string>
     <string name="login_subtitle">Login to see more features of Smartech SDK</string>
-    <string name="logout">APPINBOX</string>
+    <string name="logout">Logout</string>
     <string name="not_available">Not Available</string>
     <string name="opt_in_apps">Opt In-Apps</string>
     <string name="opt_push_notifications">Opt Push Notifications</string>
@@ -58,5 +58,8 @@
     <string name="update_profile">Update Profile</string>
     <string name="user_identity_cleared">User Identity Cleared.</string>
     <string name="you_are_logged_out">You are logged out.</string>
+    <string name="already_registered">Already Registered</string>
     <string name="img_netcore_description">Netcore Image</string>
+    <string name="app_inbox">Default Inbox</string>
+    <string name="custom_app_inbox">Custom Inbox</string>
 </resources>

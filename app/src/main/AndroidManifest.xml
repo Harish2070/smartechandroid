@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
 
+
+
     <application
         android:name=".MainApplication"
         android:allowBackup="true"
@@ -14,10 +16,15 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:fullBackupContent="@xml/my_backup_file"
+        android:dataExtractionRules="@xml/my_backup_file_31"
         android:theme="@style/Theme.SmartTechDemo">
         <activity android:name=".RegisterScreen" />
         <activity android:name=".LoginScreen"/>
        <activity android:name=".MainActivity"/>
+        <activity android:name=".DashBoardScreen"/>
+        <activity android:name=".CustomInbox"/>
+
         <activity
             android:name=".SplashScreen"
             android:exported="true">
@@ -34,6 +41,16 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="testandroid"
                     android:host="smartech_sdk_td" />
+            </intent-filter>
+
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="netcore" />
+
             </intent-filter>
         </activity>
 
@@ -52,6 +69,18 @@
         <meta-data
             android:name="SMT_APP_ID"
             android:value="bc27f59e25ec1dcc74f343111fb05190" />
+        <meta-data
+            android:name="HANSEL_APP_ID"
+            android:value="O032WHH4VDVY9R9QE1486YHTA" />
+
+        <meta-data
+            android:name="HANSEL_APP_KEY"
+            android:value="KF7W5ANHUE36XMXMT4ETL146OJIOJFCYLSP438RY57SBRIAS2G" />
+
+        <meta-data
+            android:name="SMT_USE_ENCRYPTION"
+            android:value="true" />
+
         <meta-data
             android:name="SMT_IS_AUTO_FETCHED_LOCATION"
             android:value="1" />

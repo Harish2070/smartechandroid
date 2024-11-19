@@ -65,8 +65,8 @@ class RegisterScreen: AppCompatActivity(), View.OnClickListener {
         when (v.id) {
             R.id.log_button -> {
                 Toast.makeText(applicationContext,"Login screen", Toast.LENGTH_SHORT).show()
-            // val intentLog = Intent(applicationContext, LoginScreen::class.java)
-            //  startActivity(intentLog)
+             val intentLog = Intent(applicationContext, LoginScreen::class.java)
+             startActivity(intentLog)
 
             }
             R.id.reg_button -> postData()

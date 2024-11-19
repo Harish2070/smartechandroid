@@ -13,6 +13,8 @@ import com.netcore.android.Smartech
 import com.netcore.android.logger.SMTDebugLevel
 import com.netcore.android.smartechpush.SmartPush
 import com.netcore.android.smartechpush.notification.SMTNotificationOptions
+import io.hansel.core.logger.HSLLogLevel
+import io.hansel.hanselsdk.Hansel
 import java.lang.ref.WeakReference
 
 class MainApplication : Application() {
@@ -24,8 +26,16 @@ class MainApplication : Application() {
         // Initialize the Smartech SDK
         val smartech = Smartech.getInstance(WeakReference(applicationContext))
         smartech.initializeSdk(this)
-        smartech.setDebugLevel(SMTDebugLevel.Level.VERBOSE) // Use enum instead of magic number
+       // smartech.setDebugLevel(SMTDebugLevel.Level.VERBOSE) // Use enum instead of magic number
         smartech.trackAppInstallUpdateBySmartech()
+        Smartech.getInstance(WeakReference(applicationContext)).setDebugLevel(9)
+
+
+        HSLLogLevel.all.isEnabled = true
+        HSLLogLevel.mid.isEnabled = true
+        HSLLogLevel.debug.isEnabled = true
+        Hansel.enableDebugLogs()
+
 
         // Fetch the FCM token
         fetchFcmToken()
