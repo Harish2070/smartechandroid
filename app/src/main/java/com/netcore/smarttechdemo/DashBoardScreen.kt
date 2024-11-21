@@ -30,6 +30,7 @@ class DashBoardScreen : AppCompatActivity() {
     private lateinit var tvAppInbox: TextView
     private lateinit var tvCustomAppInbox: TextView
     private lateinit var tvSetLocation: TextView
+    private lateinit var tvHansel: TextView
     private lateinit var preferences: SharedPreferences
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
@@ -63,6 +64,7 @@ class DashBoardScreen : AppCompatActivity() {
         tvAppInbox = findViewById(R.id.tv_appinox)
         tvCustomAppInbox = findViewById(R.id.tv_customappinox)
         tvSetLocation = findViewById(R.id.tv_set_location)
+        tvHansel = findViewById(R.id.tv_ignoretag)
         preferences = getSharedPreferences("SHARED_PREF", Context.MODE_PRIVATE)
     }
 
@@ -78,6 +80,12 @@ class DashBoardScreen : AppCompatActivity() {
         tvAppInbox.setOnClickListener { openAppInbox() }
         tvCustomAppInbox.setOnClickListener { openCustomAppInbox() }
         tvSetLocation.setOnClickListener { setLocation() }
+        tvHansel.setOnClickListener { hanselInvisibleview() }
+
+    }
+
+    private fun hanselInvisibleview() {
+        startActivity(Intent(this, HanselIgnoreView::class.java))
     }
 
     private fun copyFcmToken() {

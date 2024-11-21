@@ -206,6 +206,16 @@
             android:textColor="@android:color/black"
             app:drawableStartCompat="@drawable/ic_location_24"
             android:drawablePadding="8dp" />
+
+
+
+        <TextView
+            android:id="@+id/tv_ignoretag"
+            style="@style/SectionItemStyle"
+            android:text="@string/set_location"
+            android:textColor="@android:color/black"
+            app:drawableStartCompat="@drawable/ic_location_24"
+            android:drawablePadding="8dp" />
     </LinearLayout>
 </ScrollView>
 

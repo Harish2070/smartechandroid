@@ -63,6 +63,27 @@ class MainActivity : AppCompatActivity() {
         // Set up button click listeners
         btnAppInbox.setOnClickListener {
             //fetchInboxMessages() // Handle APPINBOX button click
+
+            val smartechAppInbox = SmartechAppInbox.getInstance(WeakReference(applicationContext))
+
+            // Retrieve and log messages of type READ_MESSAGE
+            val readMessages = smartechAppInbox.getAppInboxMessages(SMTAppInboxMessageType.READ_MESSAGE)
+            Log.i("INBOX Read Messages", " ReadMessages fetched: ${readMessages.toString()}")
+
+            val unreadMessages = smartechAppInbox.getAppInboxMessages(SMTAppInboxMessageType.UNREAD_MESSAGE)
+            Log.i("INBOX UnRead Messages", " UnReadMessages fetched: ${unreadMessages.toString()}")
+
+            val messages = smartechAppInbox.getAppInboxMessages(SMTAppInboxMessageType.INBOX_MESSAGE)
+            Log.i("INBOX Messages", "INBOX_MESSAGE: ${messages.toString()}")
+
+
+
+
+            val categoryList = arrayListOf<String>("nuvama")
+            val categoryFilteredData = smartechAppInbox.getAppInboxMessages(categoryList)
+
+
+            Log.i("INBOX categoryList", "categoryFilteredData: ${categoryFilteredData.toString()}")
         }
 
         btnAppInbox2.setOnClickListener {

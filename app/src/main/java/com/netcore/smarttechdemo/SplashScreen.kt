@@ -8,9 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.netcore.android.Smartech
 import java.lang.ref.WeakReference
 
+
 class SplashScreen : AppCompatActivity() {
 
-    private val splashScreenDelay: Long = 3000 // Duration of the splash screen in milliseconds
+    private val splashScreenDelay: Long = 2000 // Duration of the splash screen in milliseconds
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

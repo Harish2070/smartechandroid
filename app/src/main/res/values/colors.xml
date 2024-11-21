@@ -21,6 +21,6 @@
 
     <color name="dashboardbutton_color">#2196F3</color>
     <color name="button_color_secondary">#03A9F4</color>
-
+    <color name="action_button_dcolor">#993f6c87</color>
 
 </resources>
