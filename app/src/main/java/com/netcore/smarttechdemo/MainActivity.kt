@@ -4,6 +4,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -49,11 +50,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Pair the test device with the SDK, using the data string from the intent if available
-        Hansel.pairTestDevice(intent.dataString)
+
         SmartPush.getInstance(WeakReference(applicationContext)).requestNotificationPermission(notificationPermissionCallback)
         SmartPush.getInstance(WeakReference(applicationContext)).updateNotificationPermission()
-        Smartech.getInstance(WeakReference(applicationContext)).login("harish@gmail.com")
+
 
 
         initUI() // Initialize UI elements
@@ -109,6 +109,13 @@ class MainActivity : AppCompatActivity() {
         val hanselActionsListener = object : HanselDeepLinkListener {
             override fun onLaunchUrl(url: String?) {
                 //Perform task based on url
+
+                if (url.isNullOrEmpty()) {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                    this@MainActivity.startActivity(intent)
+                } else {
+                    Toast.makeText( this@MainActivity, " Deeplink Not Available", Toast.LENGTH_SHORT).show()
+                }
             }
         }
         //Register the instance with this line:

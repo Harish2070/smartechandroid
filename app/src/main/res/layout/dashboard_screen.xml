@@ -85,71 +85,151 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- Tracking Events Section -->
+
+        <!-- Tracking Events Section -->
         <TextView
             style="@style/SectionHeaderStyle"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="10dp"
             android:text="@string/tracking_events"
-            android:textColor="@color/color_white"
+            android:textColor="@color/black"
             android:paddingBottom="8dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="4dp"
+            android:padding="1dp"
             android:layout_marginTop="8dp"
             android:background="@color/colorLightGrey"
-            android:elevation="4dp">
+            android:elevation="1dp">
 
             <!-- Add to Wish List -->
             <TextView
                 android:id="@+id/tv_add_to_wish_list"
                 style="@style/SectionItemStyle"
                 android:layout_width="0dp"
+                android:layout_margin="1dp"
                 android:layout_weight="1"
-                android:padding="12dp"
-                android:gravity="center"
                 android:background="@android:color/white"
+                android:drawablePadding="8dp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
                 android:text="@string/add_to_wish_list"
                 android:textColor="@android:color/black"
-                app:drawableStartCompat="@drawable/ic_heart_24"
-                android:drawablePadding="8dp" />
+                android:textSize="12sp"
+                app:drawableStartCompat="@drawable/ic_heart_24" />
 
             <!-- Add to Cart -->
             <TextView
                 android:id="@+id/tv_add_to_cart"
                 style="@style/SectionItemStyle"
                 android:layout_width="0dp"
+                android:layout_margin="1dp"
                 android:layout_weight="1"
-                android:padding="12dp"
-                android:gravity="center"
                 android:background="@android:color/white"
+                android:drawablePadding="8dp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
                 android:text="@string/add_to_cart"
                 android:textColor="@android:color/black"
-                app:drawableStartCompat="@drawable/ic_add_shopping_cart_24"
-                android:drawablePadding="8dp" />
+                android:textSize="12sp"
+                app:drawableStartCompat="@drawable/ic_add_shopping_cart_24" />
 
             <!-- Checkout -->
             <TextView
                 android:id="@+id/tv_checkout"
                 style="@style/SectionItemStyle"
                 android:layout_width="0dp"
+                android:layout_margin="1dp"
                 android:layout_weight="1"
-                android:padding="12dp"
-                android:gravity="center"
                 android:background="@android:color/white"
+                android:drawablePadding="8dp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
                 android:text="@string/checkout"
                 android:textColor="@android:color/black"
-                app:drawableStartCompat="@drawable/ic_check_24"
-                android:drawablePadding="8dp" />
+                android:textSize="12sp"
+                app:drawableStartCompat="@drawable/ic_check_24" />
         </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!--  <TextView
+              style="@style/SectionHeaderStyle"
+              android:layout_marginTop="16dp"
+              android:text="@string/tracking_events"
+              android:textColor="@color/black"
+              android:paddingBottom="8dp" />
+
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal"
+              android:padding="1dp"
+              android:layout_marginTop="8dp"
+              android:background="@color/colorLightGrey"
+              android:elevation="1dp">
+
+              &lt;!&ndash; Add to Wish List &ndash;&gt;
+              <TextView
+                  android:id="@+id/tv_add_to_wish_list"
+                  style="@style/SectionItemStyle"
+                  android:layout_width="0dp"
+                  android:layout_weight="1"
+                  android:padding="2dp"
+                  android:gravity="center"
+                  android:background="@android:color/white"
+                  android:text="@string/add_to_wish_list"
+                  android:textColor="@android:color/black"
+                  app:drawableStartCompat="@drawable/ic_heart_24"
+                  android:drawablePadding="1dp" />
+
+              &lt;!&ndash; Add to Cart &ndash;&gt;
+              <TextView
+                  android:id="@+id/tv_add_to_cart"
+                  style="@style/SectionItemStyle"
+                  android:layout_width="0dp"
+                  android:layout_weight="1"
+                  android:padding="2dp"
+                  android:gravity="center"
+                  android:background="@android:color/white"
+                  android:text="@string/add_to_cart"
+                  android:textColor="@android:color/black"
+                  app:drawableStartCompat="@drawable/ic_add_shopping_cart_24"
+                  android:drawablePadding="1dp" />
+
+              &lt;!&ndash; Checkout &ndash;&gt;
+              <TextView
+                  android:id="@+id/tv_checkout"
+                  style="@style/SectionItemStyle"
+                  android:layout_width="0dp"
+                  android:layout_weight="1"
+                  android:padding="2dp"
+                  android:gravity="center"
+                  android:background="@android:color/white"
+                  android:text="@string/checkout"
+                  android:textColor="@android:color/black"
+                  app:drawableStartCompat="@drawable/ic_check_24"
+                  android:drawablePadding="1dp" />
+          </LinearLayout>-->
 
         <!-- Tracking Users Section -->
         <TextView
             style="@style/SectionHeaderStyle"
             android:layout_marginTop="20dp"
             android:text="@string/tracking_users"
-            android:textColor="@color/white" />
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/tv_update_profile"
@@ -175,13 +255,75 @@
             app:drawableStartCompat="@drawable/ic_exit_24"
             android:drawablePadding="8dp" />
 
+        <!-- Push Notifications Switch -->
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/sw_opt_pn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_notifications_24"
+            android:text="@string/opt_push_notifications"
+            android:textColor="@color/textPrimary"
+            style="@style/SectionItemStyle"
+            android:background="?attr/selectableItemBackground"
+            app:thumbTint="@color/switchThumb"
+            app:trackTint="@color/switchTrack" />
+
+        <!-- In-App Messages Switch -->
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/sw_opt_in_app"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_comment_24"
+            android:text="@string/opt_in_apps"
+            style="@style/SectionItemStyle"
+            android:textColor="@color/textPrimary"
+            android:background="?attr/selectableItemBackground"
+            app:thumbTint="@color/switchThumb"
+            app:trackTint="@color/switchTrack" />
+
+        <!-- Tracking Switch -->
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/sw_opt_tracking"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/SectionItemStyle"
+            android:drawableStart="@drawable/ic_trending_up_24"
+            android:text="@string/opt_tracking"
+            android:textColor="@color/textPrimary"
+            android:background="?attr/selectableItemBackground"
+            app:thumbTint="@color/switchThumb"
+            app:trackTint="@color/switchTrack" />
+
+
+
+
+     <!--   &lt;!&ndash; Push Notifications Switch &ndash;&gt;
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/sw_opt_pn"
+            style="@style/SectionItemStyle"
+            android:drawableStart="@drawable/ic_notifications_24"
+            android:text="@string/opt_push_notifications" />
+
+        &lt;!&ndash; In-App Messages Switch &ndash;&gt;
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/sw_opt_in_app"
+            style="@style/SectionItemStyle"
+            android:drawableStart="@drawable/ic_comment_24"
+            android:text="@string/opt_in_apps" />
+
+        &lt;!&ndash; Tracking Switch &ndash;&gt;
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/sw_opt_tracking"
+            style="@style/SectionItemStyle"
+            android:drawableStart="@drawable/ic_trending_up_24"
+            android:text="@string/opt_tracking" />
+-->
         <!-- Advanced Section -->
         <TextView
             style="@style/SectionHeaderStyle"
             android:layout_marginTop="20dp"
-
             android:text="@string/advanced"
-            android:textColor="@color/white" />
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/tv_appinox"
@@ -207,14 +349,17 @@
             app:drawableStartCompat="@drawable/ic_location_24"
             android:drawablePadding="8dp" />
 
-
+        <TextView
+            style="@style/SectionHeaderStyle"
+            android:layout_marginTop="10dp"
+            android:text="@string/nudges_px" />
 
         <TextView
             android:id="@+id/tv_ignoretag"
             style="@style/SectionItemStyle"
-            android:text="@string/set_location"
+            android:text="@string/hansel_ignore"
             android:textColor="@android:color/black"
-            app:drawableStartCompat="@drawable/ic_location_24"
+            app:drawableStartCompat="@drawable/ic_ignore_view"
             android:drawablePadding="8dp" />
     </LinearLayout>
 </ScrollView>

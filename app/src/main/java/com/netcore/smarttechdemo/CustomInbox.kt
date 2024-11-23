@@ -34,6 +34,8 @@ class CustomInbox : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.custom_inbox)
 
+        supportActionBar?.hide()
+
         // Log in the user to Smartech
         Smartech.getInstance(WeakReference(applicationContext))
             .login("harish@gmail.com")
@@ -48,7 +50,7 @@ class CustomInbox : AppCompatActivity() {
 
     // Fetch inbox messages from Smartech
     private fun fetchInboxMessages() {
-        val categoryList = arrayListOf("nuvama") // Define category filter
+        val categoryList = arrayListOf("sidiksha") // Define category filter
         Toast.makeText(applicationContext, "Fetching inbox messages...", Toast.LENGTH_SHORT).show()
 
         val smartechAppInbox = SmartechAppInbox.getInstance(WeakReference(applicationContext))

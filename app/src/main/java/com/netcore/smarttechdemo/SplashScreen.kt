@@ -6,6 +6,7 @@ import android.os.Handler
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.netcore.android.Smartech
+import io.hansel.hanselsdk.Hansel
 import java.lang.ref.WeakReference
 
 
@@ -16,6 +17,10 @@ class SplashScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.splash_screen)
+        supportActionBar?.hide()
+
+        // Pair the test device with the SDK, using the data string from the intent if available
+        Hansel.pairTestDevice(intent.dataString)
 
         // Make the activity fullscreen
         window.setFlags(

@@ -44,6 +44,8 @@
     <string name="profile_updated">Profile Updated.</string>
     <string name="registration_successful">Registration Successful.</string>
     <string name="set_location">Set Location</string>
+    <string name="hansel_ignore">Ignore View</string>
+    <string name="nudges_px">Nudge(Product Experience)</string>
     <string name="set_update_user_identity">Set/Update User Identity</string>
     <string name="smartech_sdk_version">Smartech SDK v3.2.4</string>
     <string name="thank_you">Thank you.</string>

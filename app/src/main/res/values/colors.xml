@@ -22,5 +22,13 @@
     <color name="dashboardbutton_color">#2196F3</color>
     <color name="button_color_secondary">#03A9F4</color>
     <color name="action_button_dcolor">#993f6c87</color>
+    <color name="primaryColor">#4CAF50</color> <!-- Green for Male -->
+    <color name="accentColor">#E91E63</color> <!-- Pink for Female -->
+    <color name="action_button_color">#3F51B5</color> <!-- Blue for Submit Button -->
+    <color name="switchThumb">#FF6200EE</color> <!-- Purple -->
+    <color name="switchTrack">#D1C4E9</color>  <!-- Light Purple -->
+    <color name="backgroundLight">#FFFFFF</color> <!-- White -->
+    <color name="textPrimary">#212121</color>  <!-- Dark Gray -->
+
 
 </resources>

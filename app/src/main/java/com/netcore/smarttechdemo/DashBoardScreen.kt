@@ -4,10 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -30,20 +32,28 @@ class DashBoardScreen : AppCompatActivity() {
     private lateinit var tvAppInbox: TextView
     private lateinit var tvCustomAppInbox: TextView
     private lateinit var tvSetLocation: TextView
+    private lateinit var switchPushNotifications: SwitchCompat
+    private lateinit var switchInAppMessages: SwitchCompat
+    private lateinit var switchTracking: SwitchCompat
     private lateinit var tvHansel: TextView
     private lateinit var preferences: SharedPreferences
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 100
+        private const val BACKGROUND_LOCATION_PERMISSION_REQUEST_CODE = 101
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dashboard_screen)
+        supportActionBar?.hide()
 
         // Initialize all views
         initializeViews()
+        // Initialize method for switches
+        initializeSwitches()
 
         // Initialize location client
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -64,7 +74,12 @@ class DashBoardScreen : AppCompatActivity() {
         tvAppInbox = findViewById(R.id.tv_appinox)
         tvCustomAppInbox = findViewById(R.id.tv_customappinox)
         tvSetLocation = findViewById(R.id.tv_set_location)
+        switchPushNotifications = findViewById(R.id.sw_opt_pn)
+        switchInAppMessages = findViewById(R.id.sw_opt_in_app)
+        switchTracking = findViewById(R.id.sw_opt_tracking)
+
         tvHansel = findViewById(R.id.tv_ignoretag)
+
         preferences = getSharedPreferences("SHARED_PREF", Context.MODE_PRIVATE)
     }
 
@@ -124,12 +139,9 @@ class DashBoardScreen : AppCompatActivity() {
     }
 
     private fun updateProfile() {
-        val payload : HashMap<String, Any> = HashMap()
-        payload["FIRST_NAME"] = "Harish"
-        payload["LAST_NAME"] = "Reddy"
-        payload["AGE"] = 25
 
-        Smartech.getInstance(WeakReference(applicationContext)).updateUserProfile(payload)
+
+        startActivity(Intent(this, UpdateProfileScreen::class.java))
     }
 
     private fun clearIdentity() {
@@ -145,12 +157,44 @@ class DashBoardScreen : AppCompatActivity() {
 
     private fun openAppInbox() {
         SmartechAppInbox.getInstance(WeakReference(applicationContext)).displayAppInbox(this)
+
+
+        SmartPush.getInstance(WeakReference(this)).resetNotificationDoubleOptIn();
     }
 
     private fun openCustomAppInbox() {
         Toast.makeText(this, "Opening Custom App Inbox!", Toast.LENGTH_SHORT).show()
         startActivity(Intent(this, CustomInbox::class.java))
     }
+
+    private fun initializeSwitches() {
+        // Initialize SmartPush and Smartech instances
+        val smartPushInstance = SmartPush.getInstance(WeakReference(this))
+        val smartechInstance = Smartech.getInstance(WeakReference(this))
+
+        // Set initial states for switches
+        switchPushNotifications.isChecked = smartPushInstance.hasOptedPushNotification()
+        switchInAppMessages.isChecked = smartechInstance.hasOptedInAppMessage()
+        switchTracking.isChecked = smartechInstance.hasOptedTracking()
+
+        // Listener for Push Notifications Switch
+        switchPushNotifications.setOnCheckedChangeListener { _, isChecked ->
+            smartPushInstance.optPushNotification(isChecked)
+        }
+
+        // Listener for In-App Messages Switch
+        switchInAppMessages.setOnCheckedChangeListener { _, isChecked ->
+            smartechInstance.optInAppMessage(isChecked)
+        }
+
+        // Listener for Tracking Switch
+        switchTracking.setOnCheckedChangeListener { _, isChecked ->
+            smartechInstance.optTracking(isChecked)
+        }
+    }
+
+
+
 
     private fun setLocation() {
         if (checkPermissions()) {
@@ -160,29 +204,17 @@ class DashBoardScreen : AppCompatActivity() {
         }
     }
 
-  /*  private fun getCurrentLocation() {
+    private fun getCurrentLocation() {
+        // Check if fine location permission is granted
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions()
+            requestPermissions() // Request permissions if not granted
             return
         }
 
-        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-            location?.let {
-                val latitude = it.latitude
-                val longitude = it.longitude
-                Smartech.getInstance(WeakReference(applicationContext))
-                    .setUserLocation(latitude, longitude)
-                Toast.makeText(this, "Location set: $latitude, $longitude", Toast.LENGTH_SHORT).show()
-            } ?: Toast.makeText(this, "Location unavailable. Ensure GPS is enabled.", Toast.LENGTH_SHORT).show()
-        }.addOnFailureListener { exception ->
-            Toast.makeText(this, "Failed to get location: ${exception.message}", Toast.LENGTH_SHORT).show()
-        }
-    }*/
-
-
-    private fun getCurrentLocation() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions() // Request permissions if not already granted
+        // Check if background location permission is granted (for Android 10+)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
+            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestBackgroundPermission() // Request background location permission
             return
         }
 
@@ -210,20 +242,32 @@ class DashBoardScreen : AppCompatActivity() {
             }
     }
 
-
     private fun requestPermissions() {
+        // Request both fine location and background location permissions (for Android 10+)
         ActivityCompat.requestPermissions(
             this,
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION),
             LOCATION_PERMISSION_REQUEST_CODE
         )
     }
 
+    private fun requestBackgroundPermission() {
+        // Specifically request background location permission for Android 10+
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION),
+            BACKGROUND_LOCATION_PERMISSION_REQUEST_CODE
+        )
+    }
+
     private fun checkPermissions(): Boolean {
+        // Check if fine location and background location permissions are granted
         return ActivityCompat.checkSelfPermission(
             this,
             Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
+        ) == PackageManager.PERMISSION_GRANTED &&
+                (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q ||
+                        ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED)
     }
 
     override fun onRequestPermissionsResult(
@@ -232,12 +276,136 @@ class DashBoardScreen : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            getCurrentLocation()
-        } else {
-            Toast.makeText(this, "Location permission denied.", Toast.LENGTH_SHORT).show()
+        when (requestCode) {
+            LOCATION_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    getCurrentLocation()
+                } else {
+                    Toast.makeText(this, "Location permission denied.", Toast.LENGTH_SHORT).show()
+                }
+            }
+            BACKGROUND_LOCATION_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    getCurrentLocation()
+                } else {
+                    Toast.makeText(this, "Background location permission denied.", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*private fun setLocation() {
+        if (checkPermissions()) {
+            getCurrentLocation()
+        } else {
+            requestPermissions()
+        }
+    }
+
+
+    private fun getCurrentLocation() {
+           if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+               requestPermissions() // Request permissions if not already granted
+               return
+           }
+
+           // Retrieve the last known location
+           fusedLocationClient.lastLocation
+               .addOnSuccessListener { location ->
+                   if (location != null) {
+                       val latitude = location.latitude
+                       val longitude = location.longitude
+
+                       // Pass the location to Smartech
+                       Smartech.getInstance(WeakReference(applicationContext))
+                           .setUserLocation(location)
+
+                       // Inform user about successful location retrieval
+                       Toast.makeText(this, "Location set: $latitude, $longitude", Toast.LENGTH_SHORT).show()
+                   } else {
+                       // Handle null location scenario
+                       Toast.makeText(this, "Location unavailable. Ensure GPS is enabled.", Toast.LENGTH_SHORT).show()
+                   }
+               }
+               .addOnFailureListener { exception ->
+                   // Handle any errors while retrieving the location
+                   Toast.makeText(this, "Failed to get location: ${exception.message}", Toast.LENGTH_SHORT).show()
+               }
+       }
+
+
+       private fun requestPermissions() {
+           ActivityCompat.requestPermissions(
+               this,
+               arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+               LOCATION_PERMISSION_REQUEST_CODE
+           )
+       }
+
+       private fun checkPermissions(): Boolean {
+           return ActivityCompat.checkSelfPermission(
+               this,
+               Manifest.permission.ACCESS_FINE_LOCATION
+           ) == PackageManager.PERMISSION_GRANTED
+       }
+
+       override fun onRequestPermissionsResult(
+           requestCode: Int,
+           permissions: Array<out String>,
+           grantResults: IntArray
+       ) {
+           super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+           if (requestCode == LOCATION_PERMISSION_REQUEST_CODE && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+               getCurrentLocation()
+           } else {
+               Toast.makeText(this, "Location permission denied.", Toast.LENGTH_SHORT).show()
+           }
+       }*/
 }
 
 

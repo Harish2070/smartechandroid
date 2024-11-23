@@ -125,7 +125,7 @@ class LoginScreen : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun navigateToMainActivity() {
-        val mainIntent = Intent(this, MainActivity::class.java).apply {
+        val mainIntent = Intent(this, DashBoardScreen::class.java).apply {
             putExtra("uname", textEditTextUser.text.toString().trim())
         }
         textEditTextUser.text.clear()

@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -23,6 +24,8 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".DashBoardScreen" />
         <activity android:name=".CustomInbox" />
+        <activity android:name=".UpdateProfileScreen" />
+
         <activity
             android:name=".SplashScreen"
             android:exported="true">
@@ -57,7 +60,35 @@
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-        </service> <!-- netcorepx_row  panel app  kotlin appid -->
+        </service>
+
+
+        <meta-data
+            android:name="SMT_IS_AUTO_FETCHED_LOCATION"
+            android:value="1" />
+        <meta-data
+            android:name="SMT_USE_ENCRYPTION"
+            android:value="true" />
+        <meta-data
+            android:name="SMT_IS_AUTO_ASK_NOTIFICATION_PERMISSION"
+            android:value="0" />
+
+        <meta-data
+            android:name="SMT_OPT_IN_1_URL"
+            android:value="https://cdnt.netcoresmartech.com/smartech-app-sdk/notification-optin/prod/pn-permission-prompt-02.html" />
+        <meta-data
+            android:name="SMT_OPT_IN_2_URL"
+            android:value="https://cdnt.netcoresmartech.com/smartech-app-sdk/notification-optin/prod/pn-permission-prompt-01.html" />
+        <meta-data
+            android:name="SMT_OPT_IN_1_INTERVAL"
+            android:value="2" />
+        <meta-data
+            android:name="SMT_OPT_IN_2_INTERVAL"
+            android:value="5" />
+
+
+
+        <!-- netcorepx_row  panel app  kotlin appid -->
         <meta-data
             android:name="SMT_APP_ID"
             android:value="bc27f59e25ec1dcc74f343111fb05190" />
@@ -67,12 +98,8 @@
         <meta-data
             android:name="HANSEL_APP_KEY"
             android:value="KF7W5ANHUE36XMXMT4ETL146OJIOJFCYLSP438RY57SBRIAS2G" />
-        <meta-data
-            android:name="SMT_USE_ENCRYPTION"
-            android:value="true" />
-        <meta-data
-            android:name="SMT_IS_AUTO_FETCHED_LOCATION"
-            android:value="1" />
+
+
     </application>
 
 </manifest>
