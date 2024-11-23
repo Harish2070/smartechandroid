@@ -81,6 +81,7 @@ class CustomInbox : AppCompatActivity() {
                     }
                 }
 
+/*
                 override fun onInboxSuccess(messages: MutableList<SMTInboxMessageData>?) {
                     Log.i("INBOX Success", "Messages fetched: ${messages.toString()}")
                     hideProgressBar() // Hide progress bar after success
@@ -105,6 +106,36 @@ class CustomInbox : AppCompatActivity() {
                         Toast.makeText(applicationContext, "No messages found.", Toast.LENGTH_SHORT).show()
                     }
                 }
+*/
+override fun onInboxSuccess(messages: MutableList<SMTInboxMessageData>?) {
+    runOnUiThread {
+        hideProgressBar() // Hide progress bar after success
+
+        if (!messages.isNullOrEmpty()) {
+            // Map SMTInboxMessageData to InboxMessage for RecyclerView
+            val inboxMessages = messages.map { messageData ->
+                InboxMessage(
+                    title = messageData.smtPayload.title ?: "No Title",
+                    body = messageData.smtPayload.body ?: "No Body",
+                    time = messageData.smtPayload.publishedDate ?: "No Date",
+                    mediaUrl = messageData.smtPayload.mediaUrl ?: "",
+                    deeplink = messageData.smtPayload.deeplink
+                )
+            }
+
+            // Update RecyclerView with fetched messages
+            val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
+            recyclerView.layoutManager = LinearLayoutManager(this@CustomInbox)
+            recyclerView.adapter = InboxAdapter(inboxMessages)
+        } else {
+            Toast.makeText(applicationContext, "No messages found.", Toast.LENGTH_SHORT).show()
+        }
+    }
+}
+
+
+
+
 
             })
             .setCategory(categoryList) // Filter messages by category
