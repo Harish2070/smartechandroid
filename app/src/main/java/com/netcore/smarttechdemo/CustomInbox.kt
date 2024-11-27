@@ -59,10 +59,10 @@ class CustomInbox : AppCompatActivity() {
         val readMessages = smartechAppInbox.getAppInboxMessages(SMTAppInboxMessageType.READ_MESSAGE)
         Log.i("INBOX Read Messages", " ReadMessages fetched: ${readMessages.toString()}")
 
-        val unreadMessages = smartechAppInbox.getAppInboxMessages(SMTAppInboxMessageType.READ_MESSAGE)
+        val unreadMessages = smartechAppInbox.getAppInboxMessages(SMTAppInboxMessageType.UNREAD_MESSAGE)
         Log.i("INBOX UnRead Messages", " UnReadMessages fetched: ${unreadMessages.toString()}")
 
-        val messages = smartechAppInbox.getAppInboxMessages(SMTAppInboxMessageType.READ_MESSAGE)
+        val messages = smartechAppInbox.getAppInboxMessages(SMTAppInboxMessageType.INBOX_MESSAGE)
         Log.i("INBOX Messages", "INBOX_MESSAGE: ${messages.toString()}")
 
 
@@ -108,6 +108,8 @@ class CustomInbox : AppCompatActivity() {
                 }
 */
 override fun onInboxSuccess(messages: MutableList<SMTInboxMessageData>?) {
+
+    Log.i("INBOX Success", "Messages fetched: ${messages.toString()}")
     runOnUiThread {
         hideProgressBar() // Hide progress bar after success
 
