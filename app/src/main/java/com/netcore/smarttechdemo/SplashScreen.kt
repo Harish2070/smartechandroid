@@ -19,8 +19,16 @@ class SplashScreen : AppCompatActivity() {
         setContentView(R.layout.splash_screen)
         supportActionBar?.hide()
 
-        // Pair the test device with the SDK, using the data string from the intent if available
+        // Pair the test device with the Hansel SDK, using the data string from the intent if available
         Hansel.pairTestDevice(intent.dataString)
+        // Handle deeplink if it comes from Smartech
+        val isSmartechHandledDeeplink = Smartech.getInstance(WeakReference(this)).isDeepLinkFromSmartech(intent)
+        if (!isSmartechHandledDeeplink) {
+            handleDeepLink() // Implement your deeplink handling logic here
+        }
+
+
+
 
         // Make the activity fullscreen
         window.setFlags(
@@ -28,11 +36,7 @@ class SplashScreen : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
 
-        // Handle deeplink if it comes from Smartech
-        val isSmartechHandledDeeplink = Smartech.getInstance(WeakReference(this)).isDeepLinkFromSmartech(intent)
-        if (!isSmartechHandledDeeplink) {
-            handleDeepLink() // Implement your deeplink handling logic here
-        }
+
 
         // Use a Handler to delay the transition to the Login screen
         Handler().postDelayed({

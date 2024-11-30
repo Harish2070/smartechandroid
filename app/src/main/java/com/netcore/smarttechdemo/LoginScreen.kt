@@ -82,7 +82,6 @@ class LoginScreen : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun navigateToRegisterScreen() {
-        Smartech.getInstance(WeakReference(this)).trackEvent("opened_app", hashMapOf())
         startActivity(Intent(this, RegisterScreen::class.java))
     }
 
@@ -113,9 +112,12 @@ class LoginScreen : AppCompatActivity(), View.OnClickListener {
             editor.putBoolean(KEY_CHECKBOX, true)
             Toast.makeText(this, "User credentials saved", Toast.LENGTH_SHORT).show()
 
-            // Perform login actions
+          // Tracking user identity post successful login to the app
+            //smartech platform
             Smartech.getInstance(WeakReference(applicationContext)).login(textEditTextUser.text.toString())
+            //Hansel platform
             Hansel.getUser().setUserId(textEditTextUser.text.toString())
+
         } else {
             editor.remove(KEY_EMAIL)
             editor.remove(KEY_PASSWORD)
@@ -125,7 +127,7 @@ class LoginScreen : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun navigateToMainActivity() {
-        val mainIntent = Intent(this, DashBoardScreen::class.java).apply {
+        val mainIntent = Intent(this, MainActivity::class.java).apply {
             putExtra("uname", textEditTextUser.text.toString().trim())
         }
         textEditTextUser.text.clear()

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.netcore.android.Smartech
+import io.hansel.hanselsdk.Hansel
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.util.*
@@ -40,6 +41,9 @@ class UpdateProfileScreen : AppCompatActivity() {
             if (email.isEmpty() || mobile.isEmpty() || dob.isEmpty()) {
                 Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show()
             } else {
+
+
+                // User tracking code for smartech
                 val payload : HashMap<String, Any> = HashMap()
                 payload["EMAIL"] = email
                 payload["MOBILE"] = mobile
@@ -47,6 +51,12 @@ class UpdateProfileScreen : AppCompatActivity() {
                 payload["GENDER"] = gender
 
                 Smartech.getInstance(WeakReference(applicationContext)).updateUserProfile(payload)
+
+                // User tracking code for hansel
+                Hansel.getUser().putAttribute("EMAIL", email)
+                Hansel.getUser().putAttribute("MOBILE", mobile)
+                Hansel.getUser().putAttribute("DOB", dob)
+                Hansel.getUser().putAttribute("GENDER", gender)
                 Toast.makeText(this, "User profile update", Toast.LENGTH_SHORT).show()
             }
         }

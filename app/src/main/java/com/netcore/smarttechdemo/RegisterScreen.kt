@@ -17,6 +17,7 @@ import com.netcore.android.smartechappinbox.network.listeners.SMTInboxCallback
 import com.netcore.android.smartechappinbox.network.model.SMTInboxMessageData
 import com.netcore.android.smartechappinbox.utility.SMTAppInboxRequestBuilder
 import com.netcore.android.smartechappinbox.utility.SMTInboxDataType
+import io.hansel.hanselsdk.Hansel
 import java.lang.ref.WeakReference
 class RegisterScreen : AppCompatActivity(), View.OnClickListener {
     private lateinit var textEditTextUser: EditText
@@ -106,7 +107,10 @@ class RegisterScreen : AppCompatActivity(), View.OnClickListener {
                 password = textEditTextPassword1.text.toString().trim()
             )
             dbHelper.addUser(user)
+            // Tracking user identity post sucessful registration
             Smartech.getInstance(WeakReference(applicationContext)).login(textEditTextUser.text.toString())
+            Hansel.getUser().setUserId(textEditTextUser.text.toString())
+
 
             val intentMain = Intent(applicationContext, MainActivity::class.java)
             intentMain.putExtra("uname", textEditTextUser.text.toString().trim())
