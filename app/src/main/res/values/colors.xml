@@ -29,6 +29,14 @@
     <color name="switchTrack">#D1C4E9</color>  <!-- Light Purple -->
     <color name="backgroundLight">#FFFFFF</color> <!-- White -->
     <color name="textPrimary">#212121</color>  <!-- Dark Gray -->
+    <color name="lavender">#8692f7</color>
+
+    <color name="primaryTextColor">#212121</color>
+    <color name="secondaryTextColor">#757575</color>
+    <color name="iconColor">#FFFFFF</color>
+    <color name="cardColor1">#FF8A65</color>
+    <color name="cardColor2">#4FC3F7</color>
+
 
 
 </resources>

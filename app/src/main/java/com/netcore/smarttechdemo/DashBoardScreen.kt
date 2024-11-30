@@ -16,6 +16,7 @@ import com.google.android.gms.location.LocationServices
 import com.netcore.android.Smartech
 import com.netcore.android.smartechappinbox.SmartechAppInbox
 import com.netcore.android.smartechpush.SmartPush
+import io.hansel.hanselsdk.Hansel
 
 import java.lang.ref.WeakReference
 
@@ -35,7 +36,7 @@ class DashBoardScreen : AppCompatActivity() {
     private lateinit var switchPushNotifications: SwitchCompat
     private lateinit var switchInAppMessages: SwitchCompat
     private lateinit var switchTracking: SwitchCompat
-    private lateinit var tvHansel: TextView
+   // private lateinit var tvHansel: TextView
     private lateinit var preferences: SharedPreferences
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
@@ -62,6 +63,9 @@ class DashBoardScreen : AppCompatActivity() {
         setClickListeners()
     }
 
+
+
+    //initalzation view
     private fun initializeViews() {
         tvFcmToken = findViewById(R.id.tv_fcm_token)
         tvGuid = findViewById(R.id.tv_guid)
@@ -78,11 +82,13 @@ class DashBoardScreen : AppCompatActivity() {
         switchInAppMessages = findViewById(R.id.sw_opt_in_app)
         switchTracking = findViewById(R.id.sw_opt_tracking)
 
-        tvHansel = findViewById(R.id.tv_ignoretag)
+
 
         preferences = getSharedPreferences("SHARED_PREF", Context.MODE_PRIVATE)
     }
 
+
+    // onclick for button
     private fun setClickListeners() {
         tvFcmToken.setOnClickListener { copyFcmToken() }
         tvGuid.setOnClickListener { copyDeviceGuid() }
@@ -95,14 +101,12 @@ class DashBoardScreen : AppCompatActivity() {
         tvAppInbox.setOnClickListener { openAppInbox() }
         tvCustomAppInbox.setOnClickListener { openCustomAppInbox() }
         tvSetLocation.setOnClickListener { setLocation() }
-        tvHansel.setOnClickListener { hanselInvisibleview() }
+        //tvHansel.setOnClickListener { hanselInvisibleview() }
 
     }
 
-    private fun hanselInvisibleview() {
-        startActivity(Intent(this, HanselIgnoreView::class.java))
-    }
 
+   // push token tracking code
     private fun copyFcmToken() {
         Toast.makeText(this, "FCM Token copied!", Toast.LENGTH_SHORT).show()
         // Add clipboard functionality if needed
@@ -110,6 +114,8 @@ class DashBoardScreen : AppCompatActivity() {
         tvFcmToken.setText(pushtoken)
     }
 
+
+    //Guid tracking code
     private fun copyDeviceGuid() {
         Toast.makeText(this, "Device GUID copied!", Toast.LENGTH_SHORT).show()
         // Add clipboard functionality if needed
@@ -125,10 +131,18 @@ class DashBoardScreen : AppCompatActivity() {
         payload["hello"] = "harish"
         Smartech.getInstance(WeakReference(applicationContext)).trackEvent("add_to_whishlist", payload)
     }
+    // Custom events tracking
 
     private fun trackAddToCart() {
         Toast.makeText(this, "Added to Cart!", Toast.LENGTH_SHORT).show()
+
+        val payload : HashMap<String, Any> = HashMap()
+        payload["test"] = "5"
+        payload["hello"] = "harish"
+        Smartech.getInstance(WeakReference(applicationContext)).trackEvent("add_to_cart",payload)
     }
+
+   // Custom events tracking
 
     private fun trackCheckout() {
         val payload : HashMap<String, Any> = HashMap()
@@ -144,29 +158,41 @@ class DashBoardScreen : AppCompatActivity() {
         startActivity(Intent(this, UpdateProfileScreen::class.java))
     }
 
+
+    //clear use identity from app
     private fun clearIdentity() {
         Toast.makeText(this, "User identity cleared!", Toast.LENGTH_SHORT).show()
         Smartech.getInstance(WeakReference(applicationContext)).clearUserIdentity()
-    }
 
+
+    }
+    //clear use identity for smartech and hansel db
     private fun logoutUser() {
         Toast.makeText(this, "User Logged Out!", Toast.LENGTH_SHORT).show()
         preferences.edit().clear().apply()
         Smartech.getInstance(WeakReference(this)).logoutAndClearUserIdentity(true)
+        // hansel Reset identity
+        Hansel.getUser().clear()
+
     }
+
+    // default Ui Appinbox code
 
     private fun openAppInbox() {
         SmartechAppInbox.getInstance(WeakReference(applicationContext)).displayAppInbox(this)
-
-
+        //double push notification option
         SmartPush.getInstance(WeakReference(this)).resetNotificationDoubleOptIn();
     }
 
+
+    //Custom Ui appinbox
     private fun openCustomAppInbox() {
         Toast.makeText(this, "Opening Custom App Inbox!", Toast.LENGTH_SHORT).show()
         startActivity(Intent(this, CustomInbox::class.java))
     }
 
+
+    // opt in and opt out for push notification and custom events and inapp's
     private fun initializeSwitches() {
         // Initialize SmartPush and Smartech instances
         val smartPushInstance = SmartPush.getInstance(WeakReference(this))
@@ -195,7 +221,7 @@ class DashBoardScreen : AppCompatActivity() {
 
 
 
-
+// Location permissons and Track lat and longitude
     private fun setLocation() {
         if (checkPermissions()) {
             getCurrentLocation()
@@ -293,119 +319,6 @@ class DashBoardScreen : AppCompatActivity() {
             }
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /*private fun setLocation() {
-        if (checkPermissions()) {
-            getCurrentLocation()
-        } else {
-            requestPermissions()
-        }
-    }
-
-
-    private fun getCurrentLocation() {
-           if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-               requestPermissions() // Request permissions if not already granted
-               return
-           }
-
-           // Retrieve the last known location
-           fusedLocationClient.lastLocation
-               .addOnSuccessListener { location ->
-                   if (location != null) {
-                       val latitude = location.latitude
-                       val longitude = location.longitude
-
-                       // Pass the location to Smartech
-                       Smartech.getInstance(WeakReference(applicationContext))
-                           .setUserLocation(location)
-
-                       // Inform user about successful location retrieval
-                       Toast.makeText(this, "Location set: $latitude, $longitude", Toast.LENGTH_SHORT).show()
-                   } else {
-                       // Handle null location scenario
-                       Toast.makeText(this, "Location unavailable. Ensure GPS is enabled.", Toast.LENGTH_SHORT).show()
-                   }
-               }
-               .addOnFailureListener { exception ->
-                   // Handle any errors while retrieving the location
-                   Toast.makeText(this, "Failed to get location: ${exception.message}", Toast.LENGTH_SHORT).show()
-               }
-       }
-
-
-       private fun requestPermissions() {
-           ActivityCompat.requestPermissions(
-               this,
-               arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-               LOCATION_PERMISSION_REQUEST_CODE
-           )
-       }
-
-       private fun checkPermissions(): Boolean {
-           return ActivityCompat.checkSelfPermission(
-               this,
-               Manifest.permission.ACCESS_FINE_LOCATION
-           ) == PackageManager.PERMISSION_GRANTED
-       }
-
-       override fun onRequestPermissionsResult(
-           requestCode: Int,
-           permissions: Array<out String>,
-           grantResults: IntArray
-       ) {
-           super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-           if (requestCode == LOCATION_PERMISSION_REQUEST_CODE && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-               getCurrentLocation()
-           } else {
-               Toast.makeText(this, "Location permission denied.", Toast.LENGTH_SHORT).show()
-           }
-       }*/
 }
 
 

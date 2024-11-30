@@ -4,6 +4,7 @@ import android.app.Application
 import android.app.NotificationManager
 import android.content.ContentValues
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.os.Build
 import android.text.TextUtils
 import android.util.Log
@@ -27,17 +28,31 @@ class MainApplication : Application() {
 
         // Initialize the Smartech SDK
         val smartech = Smartech.getInstance(WeakReference(applicationContext))
-        smartech.initializeSdk(this)
-       // smartech.setDebugLevel(SMTDebugLevel.Level.VERBOSE)
-        smartech.trackAppInstallUpdateBySmartech()
-        Smartech.getInstance(WeakReference(applicationContext)).setDebugLevel(9)
-        SmartPush.getInstance(WeakReference(this)).initiateNotificationDoubleOptIn()
-        SmartPush.getInstance(WeakReference(this)).showInstantNotificationDoubleOptIn()
 
+        // update app id 's dynamically post sdk intialzation
+        smartech.initializeSdk(this,ConfigUtils.getConfigValue(this, "SMT_APP_ID"),
+            ConfigUtils.getConfigValue(this, "HANSEL_APP_ID"),
+            ConfigUtils.getConfigValue(this, "HANSEL_APP_KEY"))
+       // smartech.setDebugLevel(SMTDebugLevel.Level.VERBOSE)
+
+        // tracking app install and app update
+        smartech.trackAppInstallUpdateBySmartech()
+
+        // sdk logs enabled code
+        Smartech.getInstance(WeakReference(applicationContext)).setDebugLevel(9)
+
+       // enable px sdk logs
         HSLLogLevel.all.isEnabled = true
         HSLLogLevel.mid.isEnabled = true
         HSLLogLevel.debug.isEnabled = true
         Hansel.enableDebugLogs()
+
+
+        //double optin push notification option
+        SmartPush.getInstance(WeakReference(this)).initiateNotificationDoubleOptIn()
+        SmartPush.getInstance(WeakReference(this)).showInstantNotificationDoubleOptIn()
+
+
 
 
         // Fetch the FCM token
@@ -50,6 +65,9 @@ class MainApplication : Application() {
         setupNotificationOptions()
         setupNotificationSound()
     }
+
+
+
 
     private fun setupNotificationSound() {
         // Create a notification channel group
@@ -130,6 +148,11 @@ class MainApplication : Application() {
             Log.i("TOKEN", "Both tokens are the same.")
         }
     }
+
+
+
+
+
 }
 
 

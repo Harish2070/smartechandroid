@@ -1,26 +1,13 @@
 package com.netcore.smarttechdemo
 
-import android.app.NotificationManager
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.Button
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.cardview.widget.CardView
 import com.netcore.android.Smartech
-import com.netcore.android.smartechappinbox.SmartechAppInbox
-import com.netcore.android.smartechappinbox.network.listeners.SMTInboxCallback
-import com.netcore.android.smartechappinbox.network.model.SMTInboxMessageData
-import com.netcore.android.smartechappinbox.utility.SMTAppInboxMessageType
-import com.netcore.android.smartechappinbox.utility.SMTAppInboxRequestBuilder
-import com.netcore.android.smartechappinbox.utility.SMTInboxDataType
 import com.netcore.android.smartechpush.SmartPush
 import com.netcore.android.smartechpush.pnpermission.SMTNotificationPermissionCallback
 import com.netcore.android.smartechpush.pnpermission.SMTPNPermissionConstants
@@ -32,8 +19,12 @@ import java.lang.ref.WeakReference
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var btnAppInbox: Button
-    private lateinit var btnAppInbox2: Button
+    private lateinit var btnAppIds: CardView
+    private lateinit var btnCe: CardView
+    private lateinit var btnpx: CardView
+    private lateinit var btnSdkReleases: CardView
+
+    //android 13 permissons code for android 13 and versions
 
     private val notificationPermissionCallback = object : SMTNotificationPermissionCallback {
         override fun notificationPermissionStatus(status: Int) {
@@ -45,172 +36,56 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
 
-        SmartPush.getInstance(WeakReference(applicationContext)).requestNotificationPermission(notificationPermissionCallback)
+//android 13 permissons code for android 13 and versions intializations
+        SmartPush.getInstance(WeakReference(applicationContext))
+            .requestNotificationPermission(notificationPermissionCallback)
         SmartPush.getInstance(WeakReference(applicationContext)).updateNotificationPermission()
 
-
-
         initUI() // Initialize UI elements
-        hanselactionlistener()
-        hanseleventlistener()
-
-        // Set up button click listeners
-        btnAppInbox.setOnClickListener {
-            //fetchInboxMessages() // Handle APPINBOX button click
-
-            val smartechAppInbox = SmartechAppInbox.getInstance(WeakReference(applicationContext))
-
-            // Retrieve and log messages of type READ_MESSAGE
-            val readMessages = smartechAppInbox.getAppInboxMessages(SMTAppInboxMessageType.READ_MESSAGE)
-            Log.i("INBOX Read Messages", " ReadMessages fetched: ${readMessages.toString()}")
-
-            val unreadMessages = smartechAppInbox.getAppInboxMessages(SMTAppInboxMessageType.UNREAD_MESSAGE)
-            Log.i("INBOX UnRead Messages", " UnReadMessages fetched: ${unreadMessages.toString()}")
-
-            val messages = smartechAppInbox.getAppInboxMessages(SMTAppInboxMessageType.INBOX_MESSAGE)
-            Log.i("INBOX Messages", "INBOX_MESSAGE: ${messages.toString()}")
 
 
-
-
-            val categoryList = arrayListOf<String>("nuvama")
-            val categoryFilteredData = smartechAppInbox.getAppInboxMessages(categoryList)
-
-
-            Log.i("INBOX categoryList", "categoryFilteredData: ${categoryFilteredData.toString()}")
+        // Set up button click listener navigate to app id update screen
+        btnAppIds.setOnClickListener {
+            val intent = Intent(this, ConfigActivity::class.java)
+            startActivity(intent)
         }
 
-        btnAppInbox2.setOnClickListener {
+
+        // Navigate ce dash board screen
+        btnCe.setOnClickListener {
             val intent = Intent(this, DashBoardScreen::class.java)
             startActivity(intent)
+        }
 
+   // Naviagate to product experience screen
+        btnpx.setOnClickListener {
+            startActivity(Intent(this, ProductExperienceDashBoard::class.java))
+        }
+
+        btnSdkReleases.setOnClickListener {
+            val url = "https://developer.netcorecloud.com/docs/android-release-notes"
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse(url)
+            }
+            startActivity(intent)
         }
 
     }
-
-    private fun hanseleventlistener() {
-        var hanselInternalEventsListener: HanselInternalEventsListener =
-            HanselInternalEventsListener { eventName, dataFromHansel ->
-                Smartech.getInstance(WeakReference(applicationContext)).trackEvent(eventName,
-                    dataFromHansel as HashMap<String, Any>?
-                )
-            }
-        HanselTracker.registerListener(hanselInternalEventsListener)
-    }
-
-    private fun hanselactionlistener() {
-        //Create an instance of HanselActionListener
-        val hanselActionsListener = object : HanselDeepLinkListener {
-            override fun onLaunchUrl(url: String?) {
-                //Perform task based on url
-
-                if (url.isNullOrEmpty()) {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                    this@MainActivity.startActivity(intent)
-                } else {
-                    Toast.makeText( this@MainActivity, " Deeplink Not Available", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-        //Register the instance with this line:
-        Hansel.registerHanselDeeplinkListener(hanselActionsListener)
-    }
-
-    /*   private fun fetchInboxMessages() {
-            val categoryList = arrayListOf("nuvama")
-            Toast.makeText(applicationContext, "Fetching inbox messages...", Toast.LENGTH_SHORT).show()
-
-            val smartechAppInbox = SmartechAppInbox.getInstance(WeakReference(applicationContext))
-            val builder = SMTAppInboxRequestBuilder.Builder(SMTInboxDataType.ALL)
-                .setCallback(object : SMTInboxCallback {
-
-                    override fun onInboxFail() {
-                        hideProgressBar()
-                        Toast.makeText(applicationContext, "Failed to fetch inbox messages.", Toast.LENGTH_SHORT).show()
-                    }
-
-                    override fun onInboxProgress() {
-                        runOnUiThread {
-                            progressBar.visibility = View.VISIBLE // Show progress bar while loading
-                        }
-                    }
-
-                    override fun onInboxSuccess(messages: MutableList<SMTInboxMessageData>?) {
-                        Log.i("INBOX Success", "Messages fetched: ${messages.toString()}")
-
-                        val count = smartechAppInbox.getAppInboxMessageCount(SMTAppInboxMessageType.INBOX_MESSAGE)
-                        Log.i("INBOX count", "Messages fetched: ${count.toInt()}")
-                        hideProgressBar()
-
-                        if (!messages.isNullOrEmpty()) {
-                            val inboxMessages = messages.map { messageData ->
-                                InboxMessage(
-                                    title = messageData.smtPayload.title ?: "No Title",
-                                    body = messageData.smtPayload.body ?: "No Body",
-                                    time = messageData.smtPayload.publishedDate ?: "No Date",
-                                    mediaUrl = messageData.smtPayload.mediaUrl ?: ""
-                                )
-                            }
-
-                            // Update RecyclerView
-                            val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-                            recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
-                            recyclerView.adapter = InboxAdapter(inboxMessages)
-                        } else {
-                            Toast.makeText(applicationContext, "No messages found.", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-
-                }).setCategory(categoryList)
-                .setLimit(10)
-                .build()
-
-            smartechAppInbox.getAppInboxMessages(builder)
-        }*/
-
-
-  /*  private fun fetchInboxMessages() {
-        val categoryList = arrayListOf("nuvama")
-        val smartechAppInbox = SmartechAppInbox.getInstance(WeakReference(applicationContext))
-        val builder = SMTAppInboxRequestBuilder.Builder(SMTInboxDataType.ALL)
-            .setCallback(object : SMTInboxCallback {
-                override fun onInboxFail() {
-//                    hideProgressBar()
-                 //   requireContext().toast("Failed to fetch inbox messages.")
-                    println("App Inbox: Fetch onInboxFail: ")
-                }
-
-                override fun onInboxProgress() {
-                 //   requireContext().toast("onInboxProgress")
-                    println("App Inbox: Fetch onInboxProgress: ")
-
-                }
-
-                override fun onInboxSuccess(messages: MutableList<SMTInboxMessageData>?) {
-                   // requireContext().toast("onInboxSuccess")
-//                    Log.i("INBOX Success", "Messages fetched: ${messages.toString()}")
-                    println("App Inbox: Fetch onInboxSuccess:  ${messages.toString()}")
-                }
-            }).build()
-        smartechAppInbox.getAppInboxMessages(builder)
-    }*/
-
-   // private fun hideProgressBar() {
 
 
 
     private fun initUI() {
-        btnAppInbox = findViewById(R.id.btn_appinbox)
-        btnAppInbox2 = findViewById(R.id.btn_appinbox2)
+        btnAppIds = findViewById(R.id.btn_appid)
+        btnCe = findViewById(R.id.btn_ce)
+        btnpx = findViewById(R.id.btn_px)
+        btnSdkReleases = findViewById(R.id.sdk_releases)
 
     }
-
 }
 
 
@@ -245,53 +120,15 @@ class MainActivity : AppCompatActivity() {
 
 
 
-/*  private fun fetchInboxMessages() {
-      val categoryList = arrayListOf("nuvama")
-      Toast.makeText(applicationContext, "INBOX Start", Toast.LENGTH_SHORT).show()
 
-      val smartechAppInbox = SmartechAppInbox.getInstance(WeakReference(applicationContext))
 
-      val builder = SMTAppInboxRequestBuilder.Builder(SMTInboxDataType.ALL)
-          .setCallback(object : SMTInboxCallback {
 
-              override fun onInboxFail() {
-                  hideProgressBar()
-                  Toast.makeText(applicationContext, "INBOX Fail", Toast.LENGTH_SHORT).show()
-              }
 
-              override fun onInboxProgress() {
-                  runOnUiThread {
-                      progressBar.visibility = View.VISIBLE // Show progress bar
-                  }
-              }
 
-              override fun onInboxSuccess(messages: MutableList<SMTInboxMessageData>?) {
-                  Log.i("INBOX Success", "INBOX Success: ${messages.toString()}")
-                  hideProgressBar()
 
-                  if (!messages.isNullOrEmpty()) {
-                      val inboxMessages = messages.map {
-                          InboxMessage(
-                              title = it.toString() ?: "No Title",
-                              body = it.toString() ?: "No Body",
-                              deeplink = it.toString() ?: "http://example.com"
-                          )
-                      }
 
-                      val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-                      recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
-                      recyclerView.adapter = InboxAdapter(inboxMessages)
-                  } else {
-                      Toast.makeText(applicationContext, "No messages found", Toast.LENGTH_SHORT).show()
-                  }
-              }
 
-          }).setCategory(categoryList)
-          .setLimit(10)
-          .build()
 
-      smartechAppInbox.getAppInboxMessages(builder)
-  }*/
 
 
 
@@ -309,366 +146,44 @@ class MainActivity : AppCompatActivity() {
 
 
 
-/*
-package com.netcore.smarttechdemo
 
-import android.app.NotificationManager
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
-import android.view.View
-import android.widget.ProgressBar
-import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.netcore.android.Smartech
-import com.netcore.android.smartechappinbox.SmartechAppInbox
-import com.netcore.android.smartechappinbox.network.listeners.SMTInboxCallback
-import com.netcore.android.smartechappinbox.network.model.SMTInboxMessageData
-import com.netcore.android.smartechappinbox.utility.SMTAppInboxMessageType
-import com.netcore.android.smartechappinbox.utility.SMTAppInboxRequestBuilder
-import com.netcore.android.smartechappinbox.utility.SMTInboxDataType
-import com.netcore.android.smartechpush.SmartPush
-import com.netcore.android.smartechpush.notification.channel.SMTNotificationChannel
-import java.lang.ref.WeakReference
 
-class MainActivity : AppCompatActivity() {
 
-    private lateinit var logOutTextView: TextView
-    private lateinit var preferences: SharedPreferences
-    private lateinit var progressBar: ProgressBar
 
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        Smartech.getInstance(WeakReference(applicationContext)).login("harish@gmail.com")
-        preferences = getSharedPreferences("SHARED_PREF", Context.MODE_PRIVATE)
 
-        initUI()
-        setupNotificationChannel()
 
 
 
-    }
-    override fun onResume() {
-        super.onResume()
-        setupLogoutListener()
-    }
 
 
 
 
-    private fun initUI() {
-        logOutTextView = findViewById(R.id.tv_logout)
-        progressBar = findViewById(R.id.progressBar)
-        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
 
 
-    }
 
-    private fun setupNotificationChannel() {
-        SmartPush.getInstance(WeakReference(this)).createNotificationChannelGroup("customSoundGroup", "testgroup")
 
-        val smtBuilder = SMTNotificationChannel.Builder(
-            "1234", "CustSound", NotificationManager.IMPORTANCE_HIGH
-        )
-            .setChannelDescription("This is the channel description")
-            .setChannelGroupId("customSoundGroup")
-            .setNotificationSound("lau")  // Ensure sound file exists without extension
 
-        val smtNotificationChannel = smtBuilder.build()
-        SmartPush.getInstance(WeakReference(this)).createNotificationChannel(smtNotificationChannel)
-    }
 
-    private fun hideProgressBar() {
-        runOnUiThread {
-            progressBar.visibility = View.GONE // Hide the progress bar when done
-        }
-    }
-    private fun setupLogoutListener() {
-        logOutTextView.setOnClickListener {
-           fetchInboxMessages()
 
-            logOut()
-        }
-    }
 
 
 
-    private fun fetchInboxMessages() {
-        val categoryList = arrayListOf("nuvama")
-        Toast.makeText(applicationContext, "INBOX Start", Toast.LENGTH_SHORT).show()
-        val smartechAppInbox = SmartechAppInbox.getInstance(WeakReference(applicationContext))
 
-        val builder = SMTAppInboxRequestBuilder.Builder(SMTInboxDataType.ALL)
-            .setCallback(object : SMTInboxCallback {
 
 
-                override fun onInboxFail() {
-                    hideProgressBar()
-                    Toast.makeText(applicationContext, "INBOX Fail", Toast.LENGTH_SHORT).show()
-                }
 
 
-                override fun onInboxProgress() {
-                    try {
-                        runOnUiThread {
-                            progressBar.visibility = View.VISIBLE // Show the progress bar
-                        }
-                    } catch (e: Exception) {
-                        Log.e("onInboxProgress", "Error during inbox progress: ${e.message}", e)
-                    }
-                }
 
-                override fun onInboxSuccess(messages: MutableList<SMTInboxMessageData>?) {
-                   // Toast.makeText(applicationContext, "INBOX Success", Toast.LENGTH_SHORT).show()
-                    Log.i("INBOX Success", "INBOX Success:${messages.toString()}")
 
-                    if (!messages.isNullOrEmpty()) {
 
-                        hideProgressBar()
-                        val inboxMessages = messages.map {
-                           InboxMessage(
-                               title = "messages.toString() "?: "No Title",
-                                body = "messages.toString()"?: "No Body",
-                                deeplink = "messages.toString()" ?: "http://example.com"
-                            )
-                        }
-                        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-                        recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
-                        recyclerView.adapter = InboxAdapter(inboxMessages)
-                    } else {
-                        Toast.makeText(applicationContext, "No messages found", Toast.LENGTH_SHORT).show()
-                    }
-                }
 
 
-            }).setCategory(categoryList)
-            .setLimit(10)
-            .build()
 
-        smartechAppInbox.getAppInboxMessages(builder)
 
 
-    }
 
 
-    private fun logOut() {
 
-        //Default app inbox ui
-   */
-/* val smartechAppInbox = SmartechAppInbox.getInstance(WeakReference(applicationContext))
-        smartechAppInbox.displayAppInbox(this)*//*
-
-
-       */
-/* val editor = preferences.edit()
-        editor.clear()
-        editor.apply()
-        Toast.makeText(applicationContext, " Appinbox clicked", Toast.LENGTH_SHORT).show()*//*
-
-
-
-      */
-/*  val intent = Intent(this, SplashScreen::class.java)
-        startActivity(intent)*//*
-
-       // finish()
-    }
-
-    fun onClick(view: View?) {
-        logOut()
-
-    }
-}
-
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-package com.netcore.smarttechdemo
-
-
-import android.app.NotificationManager
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
-import android.os.Bundle
-import android.view.View
-import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import com.netcore.android.Smartech
-import com.netcore.android.smartechappinbox.SmartechAppInbox
-import com.netcore.android.smartechappinbox.network.listeners.SMTInboxCallback
-import com.netcore.android.smartechappinbox.network.model.SMTInboxMessageData
-import com.netcore.android.smartechappinbox.utility.SMTAppInboxRequestBuilder
-import com.netcore.android.smartechappinbox.utility.SMTInboxDataType
-import com.netcore.android.smartechpush.SmartPush
-import com.netcore.android.smartechpush.notification.channel.SMTNotificationChannel
-import java.lang.ref.WeakReference
-
-
-class MainActivity : AppCompatActivity()  {
-    private lateinit var logOutTextView: TextView
-    lateinit var preferences: SharedPreferences
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        Smartech.getInstance(WeakReference(applicationContext)).login("harish@gmail.com")
-        preferences=getSharedPreferences("SHARED_PREF",Context.MODE_PRIVATE)
-
-        init()
-
-
-        SmartPush.getInstance(WeakReference(this)).createNotificationChannelGroup("customSoundGroup", "testgroup")
-        val smtBuilder: SMTNotificationChannel.Builder= SMTNotificationChannel.Builder(
-            "1234",
-            "CustSound",
-            NotificationManager.IMPORTANCE_HIGH)
-        smtBuilder.setChannelDescription("thisischanneldesc");
-
-        //To set the description to the channel add below method.
-        smtBuilder.setChannelGroupId("customSoundGroup");
-
-        //To set sound to channel, add below method. (Note that sound name must be without extention.)
-        smtBuilder.setNotificationSound("lau")
-
-        val smtNotificationChannel: SMTNotificationChannel = smtBuilder.build()
-
-        SmartPush.getInstance(WeakReference(this)).createNotificationChannel(smtNotificationChannel)
-
-
-
-
-       logOutTextView.setOnClickListener {
-
-           //Toast.makeText(applicationContext,"Inbox start", Toast.LENGTH_SHORT).show()
-
-
-           //Toast.makeText(applicationContext,"Inbox end", Toast.LENGTH_SHORT).show()
-
-           val smartechAppInbox = SmartechAppInbox.getInstance(WeakReference(applicationContext))
-           val builder = SMTAppInboxRequestBuilder.Builder(SMTInboxDataType.ALL)
-               .setCallback(object : SMTInboxCallback {
-                   override fun onInboxFail() {
-                   }
-
-                   override fun onInboxProgress() {
-                   }
-
-                   override fun onInboxSuccess(messages: MutableList<SMTInboxMessageData>?) {
-
-
-                       Toast.makeText(applicationContext,"Inbox success"+messages.toString(), Toast.LENGTH_SHORT).show()
-                   }
-               })
-               .setCategory(arrayListOf("cat1"))
-               .setLimit(10).build();
-           smartechAppInbox.getAppInboxMessages(builder)
-
-
-
-          val editor:SharedPreferences.Editor=preferences.edit()
-           editor.clear()
-           editor.apply()
-           val intent=Intent(this,SplashScreen::class.java)
-           startActivity(intent)
-           finish()
-       }
-
-    }
-
-    private fun init() {
-      logOutTextView=findViewById(R.id.tv_logout)
-    }
-
-
-   fun onClick(view: View?) {
-
- val editor:SharedPreferences.Editor=preferences.edit()
-        editor.clear()
-        editor.apply()
-         val intent= Intent(this,SplashScreen::class.java)
-        startActivity(intent)
-        finish()
-    }
-
-
-}
-*/

@@ -13,7 +13,11 @@ class DeeplinkReceiver : BroadcastReceiver() {
         intent?.extras?.let { bundleExtra ->
             // Check if the bundle contains a deeplink key
             if (bundleExtra.containsKey(SMTBundleKeys.SMT_BUNDLE_KEY_CLICK_DEEPLINK)) {
+
+                // Normal deeplink and external web site url redirection code
                 val deepLinkValue = bundleExtra.getString(SMTBundleKeys.SMT_KEY_DEEPLINK)
+
+                // key and values  deeplink redirection code
                 val customPayload = bundleExtra.getString(SMTBundleKeys.SMT_KEY_CUSTOM_PAYLOAD)
 
                 Log.v("Harish Deeplink", "Deeplink: $deepLinkValue, Payload: $customPayload")
@@ -27,6 +31,8 @@ class DeeplinkReceiver : BroadcastReceiver() {
         }
     }
 
+
+    //  deeplink and external web site url redirection logic code
     private fun handleDeeplink(context: Context?, deeplink: String) {
         when (deeplink) {
             "sampleapp://profile" -> openProfile(context)
