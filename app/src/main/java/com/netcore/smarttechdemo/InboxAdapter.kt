@@ -21,7 +21,7 @@ class InboxAdapter(private val messages: List<InboxMessage>) : RecyclerView.Adap
         val title: TextView = itemView.findViewById(R.id.textview)           // Title of the message
         val body: TextView = itemView.findViewById(R.id.textview2)          // Body/content of the message
         val time: TextView = itemView.findViewById(R.id.textview3)          // Timestamp of the message
-        val subtitle: TextView = itemView.findViewById(R.id.Divider)        // Optional subtitle or divider
+            // Optional subtitle or divider
         val imageView: ImageView = itemView.findViewById(R.id.imageview)    // Image associated with the message
     }
 
@@ -42,7 +42,10 @@ class InboxAdapter(private val messages: List<InboxMessage>) : RecyclerView.Adap
         // Bind message data to views
         holder.title.text = message.title                                   // Set title
         holder.body.text = message.body                                     // Set body
-        holder.time.text = message.time                                     // Set timestamp
+        holder.time.text = message.time
+
+
+
 
         // Load image using Glide or set placeholder if no URL is available
         if (!message.mediaUrl.isNullOrEmpty()) {
@@ -291,6 +294,147 @@ class InboxAdapter(private val messages: List<InboxMessage>) : RecyclerView.Adap
 
 
 
+/*/*
+class InboxAdapter(private val messages: List<InboxMessage>) : RecyclerView.Adapter<InboxAdapter.ViewHolder>() {
 
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val title: TextView = itemView.findViewById(R.id.textview)
+        val body: TextView = itemView.findViewById(R.id.textview2)
+        val time: TextView = itemView.findViewById(R.id.textview3)
+        val subtitle: TextView = itemView.findViewById(R.id.Divider)
+        val imageView: ImageView = itemView.findViewById(R.id.imageview)
+    }
+
+
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_inbox_message, parent, false)
+        return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val context = holder.itemView.context
+        val smartechAppInbox = SmartechAppInbox.getInstance(WeakReference(context))
+
+        val message = messages[position]
+
+        // Set the title, body, and time fields
+        holder.title.text = message.title
+        holder.body.text = message.body
+        holder.time.text = message.time
+
+
+        // Load image using Glide
+        if (!message.mediaUrl.isNullOrEmpty()) {
+            Glide.with(holder.itemView.context)
+                .load(message.mediaUrl) // Load the image from the URL
+                .placeholder(R.drawable.ic_launcher_round) // Show placeholder while loading
+                .into(holder.imageView)
+        } else {
+            holder.imageView.setImageResource(R.drawable.ic_launcher_round) // Show placeholder if no image URL
+        }
+
+        // App inbox viewed
+        smartechAppInbox.markMessageAsViewed(message.toSMTInboxMessageData())
+
+        // Uncomment and modify if deeplink handling is needed
+      holder.itemView.setOnClickListener {
+          // App inbox viewed mark the message as clicked
+          try {
+              smartechAppInbox.markMessageAsClicked(message.deeplink.toString(),message.toSMTInboxMessageData()) // Convert to SMTInboxMessageData
+          } catch (e: Exception) {
+              e.printStackTrace()
+              Toast.makeText(context, "Failed to mark message as clicked", Toast.LENGTH_SHORT).show()
+          }
+
+          // Handle deep link navigation
+          try {
+              if (!message.deeplink.isNullOrEmpty()) {
+                  val intent = Intent(Intent.ACTION_VIEW, Uri.parse(message.deeplink))
+                  context.startActivity(intent)
+              } else {
+                  Toast.makeText(context, "No Deeplink Available", Toast.LENGTH_SHORT).show()
+              }
+          } catch (e: Exception) {
+              e.printStackTrace()
+              Toast.makeText(context, "Invalid Deeplink", Toast.LENGTH_SHORT).show()
+          }
+        }
+    }
+
+    override fun getItemCount(): Int = messages.size
+}
+*/
+
+class InboxAdapter(private val messages: List<InboxMessage>) : RecyclerView.Adapter<InboxAdapter.ViewHolder>() {
+
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val title: TextView = itemView.findViewById(R.id.textview)
+        val body: TextView = itemView.findViewById(R.id.textview2)
+        val time: TextView = itemView.findViewById(R.id.textview3)
+        val subtitle: TextView = itemView.findViewById(R.id.Divider)
+        val imageView: ImageView = itemView.findViewById(R.id.imageview)
+    }
+
+
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_inbox_message, parent, false)
+        return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val context = holder.itemView.context
+        val smartechAppInbox = SmartechAppInbox.getInstance(WeakReference(context))
+
+        val message = messages[position]
+
+        // Set the title, body, and time fields
+        holder.title.text = message.title
+        holder.body.text = message.body
+        holder.time.text = message.time
+
+
+        // Load image using Glide
+        if (!message.mediaUrl.isNullOrEmpty()) {
+            Glide.with(holder.itemView.context)
+                .load(message.mediaUrl) // Load the image from the URL
+                .placeholder(R.drawable.ic_launcher_round) // Show placeholder while loading
+                .into(holder.imageView)
+        } else {
+            holder.imageView.setImageResource(R.drawable.ic_launcher_round) // Show placeholder if no image URL
+        }
+
+        // App inbox viewed
+        smartechAppInbox.markMessageAsViewed(message.toSMTInboxMessageData())
+
+        // Uncomment and modify if deeplink handling is needed
+      holder.itemView.setOnClickListener {
+          // App inbox viewed mark the message as clicked
+          try {
+              smartechAppInbox.markMessageAsClicked(message.deeplink.toString(),message.toSMTInboxMessageData()) // Convert to SMTInboxMessageData
+          } catch (e: Exception) {
+              e.printStackTrace()
+              Toast.makeText(context, "Failed to mark message as clicked", Toast.LENGTH_SHORT).show()
+          }
+
+          // Handle deep link navigation
+          try {
+              if (!message.deeplink.isNullOrEmpty()) {
+                  val intent = Intent(Intent.ACTION_VIEW, Uri.parse(message.deeplink))
+                  context.startActivity(intent)
+              } else {
+                  Toast.makeText(context, "No Deeplink Available", Toast.LENGTH_SHORT).show()
+              }
+          } catch (e: Exception) {
+              e.printStackTrace()
+              Toast.makeText(context, "Invalid Deeplink", Toast.LENGTH_SHORT).show()
+          }
+        }
+    }
+
+    override fun getItemCount(): Int = messages.size
+}
+*/
 
 
