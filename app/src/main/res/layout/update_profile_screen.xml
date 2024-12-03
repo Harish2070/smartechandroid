@@ -10,6 +10,19 @@
         android:gravity="center_horizontal"
         android:spacing="16dp">
 
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="When you update your profile, you can perform a profile push to update your details to Smartech."
+            android:paddingTop="18dp"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="24dp"
+            android:gravity="center"/>
+
         <!-- Email Field -->
         <EditText
             android:id="@+id/et_email"

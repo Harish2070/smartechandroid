@@ -190,6 +190,14 @@
             app:drawableStartCompat="@drawable/ic_exit_24"
             android:drawablePadding="8dp" />
 
+
+        <TextView
+            style="@style/SectionHeaderStyle"
+            android:layout_marginTop="10dp"
+            android:text="@string/gdpr_setup"
+            android:textColor="@color/black" />
+
+
         <!-- Push Notifications Switch -->
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/sw_opt_pn"

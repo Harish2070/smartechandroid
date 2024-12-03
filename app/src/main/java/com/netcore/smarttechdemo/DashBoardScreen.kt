@@ -1,5 +1,7 @@
 package com.netcore.smarttechdemo
 import android.Manifest
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -82,8 +84,6 @@ class DashBoardScreen : AppCompatActivity() {
         switchInAppMessages = findViewById(R.id.sw_opt_in_app)
         switchTracking = findViewById(R.id.sw_opt_tracking)
 
-
-
         preferences = getSharedPreferences("SHARED_PREF", Context.MODE_PRIVATE)
     }
 
@@ -101,28 +101,49 @@ class DashBoardScreen : AppCompatActivity() {
         tvAppInbox.setOnClickListener { openAppInbox() }
         tvCustomAppInbox.setOnClickListener { openCustomAppInbox() }
         tvSetLocation.setOnClickListener { setLocation() }
-        //tvHansel.setOnClickListener { hanselInvisibleview() }
-
-    }
 
 
-   // push token tracking code
-    private fun copyFcmToken() {
-        Toast.makeText(this, "FCM Token copied!", Toast.LENGTH_SHORT).show()
-        // Add clipboard functionality if needed
-       val pushtoken= SmartPush.getInstance(WeakReference(applicationContext)).getDevicePushToken()
+        //setting guid and push token to  text view
+        val pushtoken= SmartPush.getInstance(WeakReference(applicationContext)).getDevicePushToken()
         tvFcmToken.setText(pushtoken)
-    }
-
-
-    //Guid tracking code
-    private fun copyDeviceGuid() {
-        Toast.makeText(this, "Device GUID copied!", Toast.LENGTH_SHORT).show()
-        // Add clipboard functionality if needed
 
         val guid=Smartech.getInstance(WeakReference(applicationContext)).getDeviceUniqueId()
         tvGuid.setText(guid)
     }
+
+
+   // push token tracking code
+
+    private fun copyFcmToken() {
+        // Get the FCM token
+        val pushtoken = SmartPush.getInstance(WeakReference(applicationContext)).getDevicePushToken()
+
+        // Copy the FCM token to the clipboard
+        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("Device Push Token", pushtoken)
+        clipboard.setPrimaryClip(clip)
+
+        // Show a Toast message
+        Toast.makeText(this, "Device Push Token copied!", Toast.LENGTH_SHORT).show()
+
+    }
+
+
+    private fun copyDeviceGuid() {
+        // Get the GUID
+        val guid = Smartech.getInstance(WeakReference(applicationContext)).getDeviceUniqueId()
+
+        // Copy the GUID to the clipboard
+        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("Device GUID", guid)
+        clipboard.setPrimaryClip(clip)
+
+        // Show a Toast message
+        Toast.makeText(this, "Device GUID copied!", Toast.LENGTH_SHORT).show()
+
+
+    }
+
 
     private fun trackAddToWishList() {
         Toast.makeText(this, "Added to Wishlist!", Toast.LENGTH_SHORT).show()
@@ -152,19 +173,16 @@ class DashBoardScreen : AppCompatActivity() {
         Toast.makeText(this, "Proceeding to Checkout!", Toast.LENGTH_SHORT).show()
     }
 
+
+   // user profile update activity
     private fun updateProfile() {
-
-
         startActivity(Intent(this, UpdateProfileScreen::class.java))
     }
-
 
     //clear use identity from app
     private fun clearIdentity() {
         Toast.makeText(this, "User identity cleared!", Toast.LENGTH_SHORT).show()
         Smartech.getInstance(WeakReference(applicationContext)).clearUserIdentity()
-
-
     }
     //clear use identity for smartech and hansel db
     private fun logoutUser() {
@@ -173,7 +191,7 @@ class DashBoardScreen : AppCompatActivity() {
         Smartech.getInstance(WeakReference(this)).logoutAndClearUserIdentity(true)
         // hansel Reset identity
         Hansel.getUser().clear()
-
+        startActivity(Intent(this, OnboardScreen::class.java))
     }
 
     // default Ui Appinbox code

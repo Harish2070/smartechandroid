@@ -62,7 +62,7 @@ class LoginScreen : AppCompatActivity(), View.OnClickListener {
         sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
     }
 
-    private fun loadUserCredentials() {
+   /* private fun loadUserCredentials() {
         val savedEmail = sharedPreferences.getString(KEY_EMAIL, null)
         val savedPassword = sharedPreferences.getString(KEY_PASSWORD, null)
         val isRemembered = sharedPreferences.getBoolean(KEY_CHECKBOX, false)
@@ -72,7 +72,35 @@ class LoginScreen : AppCompatActivity(), View.OnClickListener {
             textEditTextPassword.setText(savedPassword)
             checkBox.isChecked = true
         }
+    }*/
+   private fun loadUserCredentials() {
+       val savedEmail = sharedPreferences.getString(KEY_EMAIL, null)
+       val savedPassword = sharedPreferences.getString(KEY_PASSWORD, null)
+       val isRemembered = sharedPreferences.getBoolean(KEY_CHECKBOX, false)
+
+       if (isRemembered && !savedEmail.isNullOrEmpty() && !savedPassword.isNullOrEmpty()) {
+           textEditTextUser.setText(savedEmail)
+           textEditTextPassword.setText(savedPassword)
+           checkBox.isChecked = true
+
+           // Automatically verify and login
+           autoLogin(savedEmail, savedPassword)
+       }
+   }
+
+    private fun autoLogin(email: String, password: String) {
+        if (dbHelper.logCheckUser(email, password)) {
+            // Set credentials for tracking platforms
+            Smartech.getInstance(WeakReference(applicationContext)).login(email)
+            Hansel.getUser().setUserId(email)
+
+            navigateToMainActivity()
+        } else {
+            Snackbar.make(linearBody, getString(R.string.error_message_invalid), Snackbar.LENGTH_LONG).show()
+        }
     }
+
+
 
     override fun onClick(v: View) {
         when (v.id) {

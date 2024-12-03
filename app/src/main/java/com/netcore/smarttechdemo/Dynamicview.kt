@@ -11,6 +11,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.ref.WeakReference
+import java.util.Collections
 
 class Dynamicview : AppCompatActivity() {
 
@@ -57,6 +58,10 @@ class Dynamicview : AppCompatActivity() {
                     // Initialize adapter and set it to RecyclerView
                     myAdapter = DynamicAdapter(this@Dynamicview, productList)
                     mrecyclerView.adapter = myAdapter
+
+                    // Shuffle the data after 3 seconds as an example
+                    mrecyclerView.postDelayed({Collections.shuffle(productList) // Shuffle the list
+                        myAdapter.notifyDataSetChanged()}, 3000)
                 } else {
                     Log.d("Dynamicview", "API Response Error: ${response.code()}")
                 }
@@ -67,6 +72,8 @@ class Dynamicview : AppCompatActivity() {
             }
         })
     }
+
+
 }
 
 

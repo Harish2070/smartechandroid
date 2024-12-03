@@ -30,13 +30,14 @@
     <string name="email_id">Email Id</string>
     <string name="enter_email_id">Enter email id.</string>
     <string name="enter_your_email_id">Enter your email id</string>
-    <string name="fcm_token">FCM Token</string>
+    <string name="fcm_token">Device Push Token</string>
     <string name="first_name">First Name</string>
     <string name="guest_login">Guest Login</string>
     <string name="last_name">Last Name</string>
     <string name="login_subtitle">Login to see more features of Smartech SDK</string>
     <string name="logout">Logout</string>
     <string name="not_available">Not Available</string>
+    <string name="gdpr_setup">GDPR SETTINGS</string>
     <string name="opt_in_apps">Opt In-Apps</string>
     <string name="opt_push_notifications">Opt Push Notifications</string>
     <string name="opt_tracking">Opt Tracking</string>

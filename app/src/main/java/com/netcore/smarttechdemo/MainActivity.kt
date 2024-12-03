@@ -3,26 +3,19 @@ package com.netcore.smarttechdemo
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import com.netcore.android.Smartech
 import com.netcore.android.smartechpush.SmartPush
 import com.netcore.android.smartechpush.pnpermission.SMTNotificationPermissionCallback
 import com.netcore.android.smartechpush.pnpermission.SMTPNPermissionConstants
-import io.hansel.hanselsdk.Hansel
-import io.hansel.hanselsdk.HanselDeepLinkListener
-import io.hansel.ujmtracker.HanselInternalEventsListener
-import io.hansel.ujmtracker.HanselTracker
 import java.lang.ref.WeakReference
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var btnAppIds: CardView
+
     private lateinit var btnCe: CardView
     private lateinit var btnpx: CardView
-    private lateinit var btnSdkReleases: CardView
+
 
     //android 13 permissons code for android 13 and versions
 
@@ -49,11 +42,6 @@ class MainActivity : AppCompatActivity() {
         initUI() // Initialize UI elements
 
 
-        // Set up button click listener navigate to app id update screen
-        btnAppIds.setOnClickListener {
-            val intent = Intent(this, ConfigActivity::class.java)
-            startActivity(intent)
-        }
 
 
         // Navigate ce dash board screen
@@ -67,23 +55,15 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, ProductExperienceDashBoard::class.java))
         }
 
-        btnSdkReleases.setOnClickListener {
-            val url = "https://developer.netcorecloud.com/docs/android-release-notes"
-            val intent = Intent(Intent.ACTION_VIEW).apply {
-                data = Uri.parse(url)
-            }
-            startActivity(intent)
-        }
 
     }
 
 
 
     private fun initUI() {
-        btnAppIds = findViewById(R.id.btn_appid)
         btnCe = findViewById(R.id.btn_ce)
         btnpx = findViewById(R.id.btn_px)
-        btnSdkReleases = findViewById(R.id.sdk_releases)
+
 
     }
 }
