@@ -12,6 +12,8 @@ import androidx.annotation.RequiresApi
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.netcore.android.Smartech
+import com.netcore.android.logger.SMTDebugLevel
+
 import com.netcore.android.smartechpush.SmartPush
 import com.netcore.android.smartechpush.notification.SMTNotificationOptions
 import com.netcore.android.smartechpush.notification.channel.SMTNotificationChannel
@@ -28,18 +30,16 @@ class MainApplication : Application() {
 
         // Initialize the Smartech SDK
         val smartech = Smartech.getInstance(WeakReference(applicationContext))
-
-        // update app id 's dynamically post sdk intialzation
-        smartech.initializeSdk(this,ConfigUtils.getConfigValue(this, "SMT_APP_ID"),
+        smartech.initializeSdk(
+            this,
+            ConfigUtils.getConfigValue(this, "SMT_APP_ID"),
             ConfigUtils.getConfigValue(this, "HANSEL_APP_ID"),
-            ConfigUtils.getConfigValue(this, "HANSEL_APP_KEY"))
-       // smartech.setDebugLevel(SMTDebugLevel.Level.VERBOSE)
+            ConfigUtils.getConfigValue(this, "HANSEL_APP_KEY")
+        )
 
-        // tracking app install and app update
+        smartech.setDebugLevel(SMTDebugLevel.Level.VERBOSE)
         smartech.trackAppInstallUpdateBySmartech()
 
-        // sdk logs enabled code
-        Smartech.getInstance(WeakReference(applicationContext)).setDebugLevel(9)
 
        // enable px sdk logs
         HSLLogLevel.all.isEnabled = true
